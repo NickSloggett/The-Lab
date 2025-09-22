@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: swiftformat
+        name: swiftformat
+        entry: swiftformat
+        language: system
+        types: [swift]
+        args: ["--config", ".swiftformat"]
+      - id: swiftlint
+        name: swiftlint
+        entry: swiftlint
+        language: system
+        types: [swift]
+        pass_filenames: false
+
+
+

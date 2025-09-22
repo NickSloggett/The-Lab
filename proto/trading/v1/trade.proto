@@ -1,0 +1,21 @@
+syntax = "proto3";
+package trading.v1;
+
+message NewOrderSingle {
+  string symbol = 1;
+  double price = 2;
+  double qty = 3;
+  string side = 4; // BUY/SELL
+  string tif = 5; // GTC/IOC/FOK
+}
+
+message OrderAck {
+  string client_order_id = 1;
+  string status = 2; // NEW/REJECTED/...
+}
+
+service Trading {
+  rpc SendOrder(NewOrderSingle) returns (OrderAck);
+}
+
+

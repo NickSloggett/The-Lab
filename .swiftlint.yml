@@ -1,0 +1,18 @@
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+
+included:
+  - Packages
+  - Apps
+
+excluded:
+  - '**/.build/**'
+  - '**/.swiftpm/**'
+  - '**/SourcePackages/**'
+  - '**/DerivedData/**'
+
+opt_in_rules:
+  - empty_count
+
+

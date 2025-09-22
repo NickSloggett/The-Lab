@@ -1,0 +1,33 @@
+name: TraderMac
+options:
+  minimumXcodeGenVersion: 2.41.0
+  deploymentTarget:
+    macOS: 15.0
+packages:
+  Core:
+    path: ../../Packages/Core
+  Indicators:
+    path: ../../Packages/Indicators
+  Networking:
+    path: ../../Packages/Networking
+  Rendering:
+    path: ../../Packages/Rendering
+  Storage:
+    path: ../../Packages/Storage
+targets:
+  TraderMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_STRICT_CONCURRENCY: complete
+        SWIFT_VERSION: 6.0
+    dependencies:
+      - package: Core
+      - package: Indicators
+      - package: Networking
+      - package: Rendering
+      - package: Storage

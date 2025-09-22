@@ -1,0 +1,29 @@
+syntax = "proto3";
+package trading.v1;
+
+message Tick {
+  int64 ts_unix_ns = 1;
+  double price = 2;
+  double size = 3;
+}
+
+message BarRequest {
+  string symbol = 1;
+  string timeframe = 2; // e.g., 1m, 5m
+}
+
+message Bar {
+  int64 ts_unix_ms = 1;
+  double o = 2;
+  double h = 3;
+  double l = 4;
+  double c = 5;
+  double v = 6;
+}
+
+service MarketData {
+  rpc StreamTicks(BarRequest) returns (stream Tick);
+  rpc GetBars(BarRequest) returns (stream Bar);
+}
+
+

@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/northstar/trading
+deps: []
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+
+

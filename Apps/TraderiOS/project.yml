@@ -1,0 +1,32 @@
+name: TraderiOS
+options:
+  deploymentTarget:
+    iOS: 18.0
+packages:
+  Core:
+    path: ../../Packages/Core
+  Indicators:
+    path: ../../Packages/Indicators
+  Networking:
+    path: ../../Packages/Networking
+  Rendering:
+    path: ../../Packages/Rendering
+  Storage:
+    path: ../../Packages/Storage
+targets:
+  TraderiOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_STRICT_CONCURRENCY: complete
+        SWIFT_VERSION: 6.0
+    dependencies:
+      - package: Core
+      - package: Indicators
+      - package: Networking
+      - package: Rendering
+      - package: Storage
