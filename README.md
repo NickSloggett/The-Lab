@@ -1,74 +1,40 @@
-# The-Lab 🧪
+# The Lab 🧪
 
-**A comprehensive trading application ecosystem built with modern technologies**
+**A comprehensive multi-platform development boilerplate**
 
-The-Lab is a multi-platform trading application featuring real-time market data, advanced charting, and a scalable architecture supporting iOS, macOS, web, and backend services.
+The Lab is a modern boilerplate repository designed to kickstart your next project across web, iOS, and Android platforms. It includes all the essential tools, configurations, and best practices for rapid development.
 
-## 🏗️ Architecture
+## 🏗️ What's Included
 
-### Frontend Applications
-- **TraderiOS** - Native iOS trading app built with SwiftUI
-- **TraderMac** - Native macOS trading app with SwiftUI
-- **Web Interface** - Next.js web application with Tailwind CSS
+### Web Application
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Beautiful, accessible UI components
+- **ESLint** - Code linting and formatting
+- **Modern React** - Latest React features and patterns
 
-### Backend Services
-- **Rust Gateway** - High-performance WebSocket server for real-time data
-- **Protocol Buffers** - Efficient data serialization for trading protocols
+### iOS Application
+- **SwiftUI** - Modern iOS development framework
+- **Swift** - Apple's programming language
+- **Native iOS** - Fully native performance
+- **iOS 17+** - Latest iOS features and APIs
 
-### Core Packages
-- **Core** - Shared business logic and models
-- **Indicators** - Technical analysis indicators (Moving Averages, etc.)
-- **Networking** - WebSocket client and gRPC communication
-- **Rendering** - Chart rendering with Metal and custom views
-- **Storage** - Data persistence and caching
+### Android Application
+- **React Native** - Cross-platform mobile development
+- **TypeScript** - Type-safe development
+- **Modern RN** - Latest React Native features
+- **Android & iOS** - Single codebase, multiple platforms
 
-## 🚀 Features
-
-- 📱 **Multi-Platform**: Native iOS, macOS, and web applications
-- ⚡ **Real-Time Data**: WebSocket-based market data streaming
-- 📊 **Advanced Charting**: Custom rendering with Metal and SwiftUI
-- 🔧 **Modular Design**: Swift Package Manager for clean architecture
-- 🦀 **High Performance**: Rust backend for low-latency operations
-- 📡 **Protocol Buffers**: Efficient data serialization
-- 🎨 **Modern UI**: SwiftUI and Tailwind CSS for beautiful interfaces
-
-## 🛠️ Technology Stack
-
-- **Frontend**: SwiftUI, Next.js, TypeScript, Tailwind CSS
-- **Backend**: Rust, WebSocket, gRPC
-- **Data**: Protocol Buffers, JSON
-- **Build**: XcodeGen, Swift Package Manager, Cargo
-- **Platforms**: iOS, macOS, Web
-
-## 📁 Project Structure
-
-```
-The-Lab/
-├── Apps/
-│   ├── TraderiOS/          # iOS application
-│   └── TraderMac/          # macOS application
-├── Packages/
-│   ├── Core/               # Shared business logic
-│   ├── Indicators/         # Technical analysis
-│   ├── Networking/         # Communication layer
-│   ├── Rendering/          # Chart rendering
-│   └── Storage/            # Data persistence
-├── gateway/
-│   └── rust/               # Rust WebSocket server
-├── proto/                  # Protocol Buffer definitions
-├── web/                    # Next.js web application
-└── scripts/                # Build and deployment scripts
-```
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Xcode 15+ (for iOS/macOS apps)
-- Rust 1.70+ (for gateway server)
-- Node.js 18+ (for web app)
-- Swift 5.9+
+- **Node.js 18+** (for web and React Native)
+- **Xcode 15+** (for iOS development)
+- **Android Studio** (for Android development)
+- **Git** (for version control)
 
-### Quick Start
+### Installation
 
 1. **Clone the repository**
    ```bash
@@ -76,91 +42,175 @@ The-Lab/
    cd The-Lab
    ```
 
-2. **Bootstrap the project**
-   ```bash
-   ./scripts/bootstrap.sh
-   ```
-
-3. **Generate Protocol Buffers**
-   ```bash
-   ./scripts/generate_protos.sh
-   ```
-
-4. **Build iOS/macOS apps**
-   ```bash
-   ./scripts/xcodegen.sh
-   ```
-
-5. **Run the web application**
+2. **Web Application**
    ```bash
    cd web
    npm install
    npm run dev
+   # Open http://localhost:3000
    ```
 
-6. **Start the Rust gateway**
+3. **iOS Application**
    ```bash
-   cd gateway/rust
-   cargo run
+   # Open the iOS app in Xcode
+   open apps/ios/TheLabApp.xcodeproj
+   # Or use Swift Package Manager
    ```
 
-## 📱 Platform-Specific Setup
+4. **Android Application**
+   ```bash
+   cd apps/android
+   npm install
+   npx react-native run-android
+   ```
 
-### iOS Development
-```bash
-open Apps/TraderiOS/TraderiOS.xcodeproj
+## 📁 Project Structure
+
+```
+The-Lab/
+├── web/                    # Next.js web application
+│   ├── src/
+│   │   ├── app/           # App Router pages
+│   │   ├── components/    # React components
+│   │   └── lib/          # Utilities and configurations
+│   ├── public/           # Static assets
+│   └── package.json      # Web dependencies
+├── apps/
+│   ├── ios/              # iOS SwiftUI application
+│   │   ├── TheLabApp.swift
+│   │   └── ContentView.swift
+│   └── android/          # React Native application
+│       ├── App.tsx
+│       ├── android/      # Android-specific code
+│       └── ios/          # iOS-specific code
+└── README.md             # This file
 ```
 
-### macOS Development
-```bash
-open Apps/TraderMac/TraderMac.xcodeproj
-```
+## 🛠️ Development
 
 ### Web Development
 ```bash
 cd web
-npm install
-npm run dev
-# Open http://localhost:3000
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
 ```
 
-### Rust Gateway
+### iOS Development
 ```bash
-cd gateway/rust
-cargo build
-cargo run
+# Using Xcode
+open apps/ios/TheLabApp.xcodeproj
+
+# Using command line
+cd apps/ios
+xcodebuild -scheme TheLabApp -destination 'platform=iOS Simulator,name=iPhone 15'
 ```
 
-## 🔧 Development
-
-### Adding New Features
-1. Create feature branch: `git checkout -b feature/new-feature`
-2. Make changes in appropriate package
-3. Update tests and documentation
-4. Submit pull request
-
-### Protocol Buffer Updates
+### Android Development
 ```bash
-./scripts/generate_protos.sh
+cd apps/android
+npm run android      # Run on Android device/emulator
+npm run ios          # Run on iOS simulator
+npm run lint         # Run ESLint
+npm run test         # Run tests
 ```
 
-### Package Dependencies
-Update `Package.resolved` files by running:
+## 🎨 UI Components
+
+### Web (shadcn/ui)
+- **Button** - Interactive buttons with variants
+- **Card** - Content containers
+- **Input** - Form input fields
+- **Label** - Form labels
+- **Textarea** - Multi-line text input
+- **Select** - Dropdown selections
+- **Navigation** - Menu components
+
+### iOS (SwiftUI)
+- **Native Views** - Text, Button, VStack, HStack
+- **Navigation** - NavigationView, NavigationLink
+- **Styling** - Colors, fonts, spacing
+- **Animations** - Built-in SwiftUI animations
+
+### Android (React Native)
+- **Core Components** - View, Text, TouchableOpacity
+- **Styling** - StyleSheet API
+- **Navigation** - React Navigation (configurable)
+- **Platform APIs** - Native module integration
+
+## 📱 Platform Features
+
+| Feature | Web | iOS | Android |
+|---------|-----|-----|---------|
+| TypeScript | ✅ | ❌ | ✅ |
+| Hot Reload | ✅ | ✅ | ✅ |
+| Native Performance | ❌ | ✅ | ✅ |
+| Cross-Platform | ✅ | ❌ | ✅ |
+| App Store | ❌ | ✅ | ✅ |
+| Web Deployment | ✅ | ❌ | ❌ |
+
+## 🔧 Customization
+
+### Adding New Web Components
 ```bash
-swift package resolve
+cd web
+npx shadcn@latest add [component-name]
 ```
 
-## 📊 Current Status
+### Adding React Native Dependencies
+```bash
+cd apps/android
+npm install [package-name]
+npx react-native link [package-name]  # If needed
+```
 
-- ✅ Project structure and architecture
-- ✅ Basic iOS/macOS applications
-- ✅ Web interface with Next.js
-- ✅ Rust gateway foundation
-- ✅ Protocol Buffer definitions
-- ✅ Swift Package Manager setup
-- 🚧 Real-time data integration
-- 🚧 Advanced charting features
-- 🚧 Trading functionality
+### iOS Dependencies
+```swift
+// Add to Package.swift or use Xcode Package Manager
+dependencies: [
+    .package(url: "https://github.com/...", from: "1.0.0")
+]
+```
+
+## 🚀 Deployment
+
+### Web Deployment
+- **Vercel** (Recommended)
+  ```bash
+  cd web
+  npm run build
+  # Deploy to Vercel
+  ```
+
+- **Netlify**
+  ```bash
+  cd web
+  npm run build
+  # Deploy to Netlify
+  ```
+
+### Mobile Deployment
+- **iOS**: Archive and upload to App Store Connect
+- **Android**: Generate APK/AAB and upload to Google Play Console
+
+## 📚 Learning Resources
+
+### Web Development
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [shadcn/ui](https://ui.shadcn.com)
+
+### iOS Development
+- [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui)
+- [Swift Documentation](https://docs.swift.org/swift-book)
+- [iOS Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines)
+
+### Android Development
+- [React Native Documentation](https://reactnative.dev/docs/getting-started)
+- [React Native Tutorial](https://reactnative.dev/docs/tutorial)
+- [Android Development Guide](https://developer.android.com/guide)
 
 ## 🤝 Contributing
 
@@ -180,6 +230,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Issues](https://github.com/NickSloggett/The-Lab/issues)
 - [Discussions](https://github.com/NickSloggett/The-Lab/discussions)
 
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org) for the amazing React framework
+- [shadcn/ui](https://ui.shadcn.com) for beautiful UI components
+- [React Native](https://reactnative.dev) for cross-platform mobile development
+- [Apple](https://developer.apple.com) for SwiftUI and iOS development tools
+
 ---
 
 **Built with ❤️ by [Nick Sloggett](https://github.com/NickSloggett)**
+
+*Ready to build something amazing? Start coding! 🚀*

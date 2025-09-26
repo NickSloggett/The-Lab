@@ -1,31 +1,15 @@
-# Build artifacts
-target/
-build/
-DerivedData/
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Xcode
-*.xcworkspace/xcuserdata/
-*.xcodeproj/xcuserdata/
-*.xcodeproj/project.xcworkspace/xcuserdata/
-*.xcuserstate
-*.xcscmblueprint
-
-# Node.js
+# Dependencies
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Next.js
+# Production builds
 .next/
 out/
 build/
+dist/
 
 # Environment variables
 .env
@@ -33,6 +17,7 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # IDE
 .vscode/
@@ -40,20 +25,102 @@ build/
 *.swp
 *.swo
 
-# Rust
-target/
-Cargo.lock
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Swift Package Manager
-.swiftpm/
-.build/
+# iOS
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/app/release/
+
+# React Native
+.react-native/
+metro.config.js.bak
+apps/android/android/.gradle/
+apps/android/android/local.properties
+apps/android/android/app/build/
 
 # Logs
 *.log
 
-# Temporary files
-*.tmp
-*.temp
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# OS generated files
-Thumbs.db
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Prisma
+web/prisma/dev.db
+web/prisma/dev.db-journal
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
