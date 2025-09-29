@@ -32,3 +32,4 @@ public struct LoadingView: View {
 #Preview("Custom Message") {
     LoadingView(message: "Fetching data...")
 }
+

@@ -56,3 +56,4 @@ public struct Todo: Codable, Identifiable, Equatable {
         self.completedAt = completedAt
     }
 }
+

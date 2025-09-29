@@ -54,3 +54,4 @@ public struct ProfileHeaderView: View {
         .background(Color.Surface.card)
     }
 }
+

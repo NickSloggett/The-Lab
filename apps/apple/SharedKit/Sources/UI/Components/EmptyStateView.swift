@@ -68,3 +68,4 @@ public struct EmptyStateView: View {
         message: "Please check your internet connection and try again."
     )
 }
+

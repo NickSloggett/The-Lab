@@ -45,3 +45,4 @@ public class AppLogger {
         shared.logger.critical("\(message)", metadata: metadata)
     }
 }
+

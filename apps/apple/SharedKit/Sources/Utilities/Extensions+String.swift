@@ -52,3 +52,4 @@ public extension String {
         addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
     }
 }
+
