@@ -1,0 +1,16 @@
+#!/bin/zsh
+set -euo pipefail
+
+if command -v swiftlint >/dev/null 2>&1; then
+  echo "Running SwiftLint..."
+  (cd apps/apple && swiftlint)
+fi
+
+if command -v swiftformat >/dev/null 2>&1; then
+  echo "Running SwiftFormat (lint)..."
+  (cd apps/apple && swiftformat . --lint)
+fi
+
+echo "Pre-commit checks passed."
+
+

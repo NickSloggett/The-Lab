@@ -1,0 +1,120 @@
+name: AppleApps
+options:
+  bundleIdPrefix: com.thelabapp
+packages:
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire
+    from: 5.8.0
+  Kingfisher:
+    url: https://github.com/onevcat/Kingfisher
+    from: 7.10.0
+  Logging:
+    url: https://github.com/apple/swift-log
+    from: 1.5.0
+  SharedKit:
+    path: SharedKit
+targets:
+  iOSApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    bundleId: com.thelabapp.ios
+    sources:
+      - path: iOSApp
+    info:
+      path: iOSApp/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: Default
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    dependencies:
+      - package: SharedKit
+      - package: Alamofire
+      - package: Kingfisher
+      - package: Logging
+    prebuildScripts:
+      - name: SwiftLint
+        script: swiftlint --quiet || true
+      - name: SwiftFormat
+        script: swiftformat . --lint --quiet || true
+  iOSAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: iOSAppTests
+    dependencies:
+      - target: iOSApp
+      - package: SharedKit
+  macOSApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    bundleId: com.thelabapp.macos
+    sources:
+      - path: macOSApp
+    info:
+      path: macOSApp/Info.plist
+      properties:
+        LSMinimumSystemVersion: 13.0
+    dependencies:
+      - package: SharedKit
+      - package: Alamofire
+      - package: Kingfisher
+      - package: Logging
+    prebuildScripts:
+      - name: SwiftLint
+        script: swiftlint --quiet || true
+      - name: SwiftFormat
+        script: swiftformat . --lint --quiet || true
+  WatchApp:
+    type: application
+    platform: watchOS
+    deploymentTarget: "10.0"
+    bundleId: com.thelabapp.watch
+    sources:
+      - path: WatchApp
+    info:
+      path: WatchApp/Info.plist
+    dependencies:
+      - target: WatchAppExtension
+  WatchAppExtension:
+    type: watchkit2-extension
+    platform: watchOS
+    deploymentTarget: "10.0"
+    bundleId: com.thelabapp.watch.extension
+    sources:
+      - path: WatchAppExtension
+    info:
+      path: WatchAppExtension/Info.plist
+    dependencies:
+      - package: SharedKit
+      - package: Alamofire
+      - package: Kingfisher
+      - package: Logging
+    prebuildScripts:
+      - name: SwiftLint
+        script: swiftlint --quiet || true
+      - name: SwiftFormat
+        script: swiftformat . --lint --quiet || true
+schemes:
+  iOS:
+    build:
+      targets:
+        iOSApp: [run, archive]
+        iOSAppTests: [test]
+    test:
+      targets:
+        - name: iOSAppTests
+          parallelizable: true
+  macOS:
+    build:
+      targets:
+        macOSApp: [run, archive]
+  watchOS:
+    build:
+      targets:
+        WatchApp: [run, archive]
+        WatchAppExtension: [run, archive]
+

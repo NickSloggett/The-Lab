@@ -1,0 +1,19 @@
+disabled_rules:
+  - line_length
+  - trailing_whitespace
+  - todo
+
+opt_in_rules:
+  - empty_count
+  - sorted_imports
+
+included:
+  - iOSApp
+  - macOSApp
+  - WatchApp
+  - WatchAppExtension
+  - SharedKit
+
+reporter: "xcode"
+
+

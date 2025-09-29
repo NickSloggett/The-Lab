@@ -14,5 +14,17 @@ excluded:
 
 opt_in_rules:
   - empty_count
+  - force_cast
+  - force_try
+  - force_unwrapping
+  - implicit_return
+  - missing_docs
+  - orphaned_doc_comment
+  - vertical_parameter_alignment_on_call
+
+line_length: 120
+file_length: 500
+function_body_length: 100
+cyclomatic_complexity: 10
 
 

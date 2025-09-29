@@ -14,11 +14,11 @@ The Lab is a modern boilerplate repository designed to kickstart your next proje
 - **ESLint** - Code linting and formatting
 - **Modern React** - Latest React features and patterns
 
-### iOS Application
-- **SwiftUI** - Modern iOS development framework
+### iOS/macOS/watchOS Applications
+- **SwiftUI** - Modern native UI framework
 - **Swift** - Apple's programming language
-- **Native iOS** - Fully native performance
-- **iOS 17+** - Latest iOS features and APIs
+- **XcodeGen + SPM** - Declarative project + dependency management
+- **iOS 16+**, **macOS 13+**, **watchOS 10+**
 
 ### Android Application
 - **React Native** - Cross-platform mobile development
@@ -29,10 +29,15 @@ The Lab is a modern boilerplate repository designed to kickstart your next proje
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js 18+** (for web and React Native)
-- **Xcode 15+** (for iOS development)
-- **Android Studio** (for Android development)
-- **Git** (for version control)
+- Node.js 20+
+- Xcode 15+ (for iOS)
+- Android Studio (for Android)
+- Git
+
+### Environment Setup
+1. Copy `.env.example` to `.env.local` and fill in your variables (e.g., API keys for NextAuth, database URLs).
+2. For security, use tools like `dotenv` and never commit secrets.
+
 
 ### Installation
 
@@ -50,11 +55,12 @@ The Lab is a modern boilerplate repository designed to kickstart your next proje
    # Open http://localhost:3000
    ```
 
-3. **iOS Application**
+3. **Apple Apps (iOS/macOS/watchOS)**
    ```bash
-   # Open the iOS app in Xcode
-   open apps/ios/TheLabApp.xcodeproj
-   # Or use Swift Package Manager
+   cd apps/apple
+   make bootstrap
+   make generate
+   open AppleApps.xcodeproj
    ```
 
 4. **Android Application**
@@ -76,9 +82,7 @@ The-Lab/
 │   ├── public/           # Static assets
 │   └── package.json      # Web dependencies
 ├── apps/
-│   ├── ios/              # iOS SwiftUI application
-│   │   ├── TheLabApp.swift
-│   │   └── ContentView.swift
+│   ├── apple/            # iOS, macOS, watchOS (XcodeGen + SPM)
 │   └── android/          # React Native application
 │       ├── App.tsx
 │       ├── android/      # Android-specific code
