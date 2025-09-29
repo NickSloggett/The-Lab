@@ -1,30 +1,28 @@
+// SharedKit - A shared library for iOS, macOS, and watchOS apps
+//
+// This module exports all the shared functionality across Apple platforms
+
+// MARK: - Models
+@_exported import struct Models.AppInfo
+@_exported import struct Models.User
+@_exported import struct Models.Todo
+
+// MARK: - Networking
+@_exported import class Networking.HTTPClient
+
+// MARK: - Utilities
+@_exported import class Utilities.AppLogger
+
+// MARK: - Design System
+// Colors, Typography, Spacing, Shadows are automatically available when importing SwiftUI
+
 import Foundation
-import Alamofire
-import Logging
 
-public struct HTTPClient {
-    private let session: Session
-    private let logger: Logger
+// Re-export commonly used types
+public typealias HTTPClient = Networking.HTTPClient
 
-    public init(session: Session = .default, logger: Logger = Logger(label: "SharedKit.HTTPClient")) {
-        self.session = session
-        self.logger = logger
-    }
-
-    public func getJSON<T: Decodable>(_ url: URL, as type: T.Type = T.self) async throws -> T {
-        logger.info("GET \(url.absoluteString)")
-        let data = try await session.request(url).serializingData().value
-        return try JSONDecoder().decode(T.self, from: data)
-    }
+/// SharedKit version information
+public enum SharedKitInfo {
+    public static let version = "1.0.0"
+    public static let name = "SharedKit"
 }
-
-public struct AppInfo: Codable, Equatable {
-    public let name: String
-    public let version: String
-    public init(name: String, version: String) {
-        self.name = name
-        self.version = version
-    }
-}
-
-
