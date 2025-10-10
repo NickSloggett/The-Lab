@@ -1,16 +1,20 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { Loader2, Send } from "lucide-react"
 import { useSession } from "next-auth/react"
-import ReactMarkdown from "react-markdown"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+// Lazy load components for code splitting
+const ChatTab = lazy(() => import("./chat-tab").then(module => ({ default: module.ChatTab })))
+const ContextTab = lazy(() => import("./context-tab").then(module => ({ default: module.ContextTab })))
+const ModelsTab = lazy(() => import("./models-tab").then(module => ({ default: module.ModelsTab })))
 
 interface Message {
   id: string
@@ -142,74 +146,30 @@ export function AIChat() {
             <TabsTrigger value="models">Models</TabsTrigger>
           </TabsList>
           <TabsContent value="chat" className="mt-0">
-            <div className="flex h-[500px] flex-col">
-              <ScrollArea className="flex-1 px-6 py-4">
-                <div className="space-y-4">
-                  {history.length === 0 && (
-                    <div className="rounded-lg border border-dashed border-white/20 bg-white/5 p-6 text-center text-sm text-white/60">
-                      Start by asking about architecture, code, or deployment strategy.
-                    </div>
-                  )}
-
-                  {history.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      <div
-                        className={`max-w-2xl rounded-lg border border-white/10 px-4 py-3 text-sm shadow-lg backdrop-blur ${
-                          message.role === "user"
-                            ? "bg-emerald-500/20 text-emerald-100"
-                            : "bg-white/10 text-white"
-                        }`}
-                      >
-                        <div className="mb-2 text-xs uppercase tracking-widest text-white/40">
-                          {message.role === "user" ? "You" : "Lab AI"}
-                        </div>
-                        <ReactMarkdown className="prose prose-invert max-w-none text-sm leading-6">
-                          {message.content}
-                        </ReactMarkdown>
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={bottomRef} />
-                </div>
-              </ScrollArea>
-
-              <form onSubmit={handleSubmit} className="border-t border-white/10 bg-black/20 p-4">
-                <div className="flex gap-3">
-                  <Input
-                    value={input}
-                    onChange={(event) => setInput(event.target.value)}
-                    placeholder="Ask about architecture, write code, plan features..."
-                    className="border-white/20 bg-black/30 text-white placeholder:text-white/40"
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-emerald-500 hover:bg-emerald-400"
-                    disabled={mutation.isPending}
-                  >
-                    {mutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-                  </Button>
-                </div>
-              </form>
-            </div>
+            <Suspense fallback={<div className="flex h-[500px] items-center justify-center"><Loader2 className="size-8 animate-spin" /></div>}>
+              <ChatTab
+                history={history}
+                input={input}
+                setInput={setInput}
+                model={model}
+                setModel={setModel}
+                onSubmit={handleSubmit}
+                isPending={mutation.isPending}
+                bottomRef={bottomRef}
+              />
+            </Suspense>
           </TabsContent>
 
-          <TabsContent value="context" className="p-6 text-sm text-white/70">
-            <h3 className="text-lg font-semibold text-white">Conversation history</h3>
-            <p className="text-white/60">
-              Responses incorporate project architecture, Prisma schema, auth rules, and recent decisions to stay consistent across web and mobile apps.
-            </p>
+          <TabsContent value="context" className="mt-0">
+            <Suspense fallback={<div className="flex items-center justify-center p-6"><Loader2 className="size-8 animate-spin" /></div>}>
+              <ContextTab />
+            </Suspense>
           </TabsContent>
 
-          <TabsContent value="models" className="p-6 text-sm text-white/70">
-            <h3 className="text-lg font-semibold text-white">Model capabilities</h3>
-            <ul className="list-disc space-y-2 pl-6 text-white/70">
-              <li><strong>Fast</strong>: Rapid iterations, quick debugging, low latency.</li>
-              <li><strong>Smart</strong>: Balanced reasoning, architecture decisions, production advice.</li>
-              <li><strong>Creative</strong>: Narrative generation, marketing copy, visionary planning.</li>
-            </ul>
+          <TabsContent value="models" className="mt-0">
+            <Suspense fallback={<div className="flex items-center justify-center p-6"><Loader2 className="size-8 animate-spin" /></div>}>
+              <ModelsTab />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </CardContent>
