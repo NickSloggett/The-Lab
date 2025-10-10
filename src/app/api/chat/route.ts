@@ -4,6 +4,18 @@ import { Redis } from "@upstash/redis"
 import { MODEL_MAP, streamAnswer } from "@/lib/ai"
 import { getCurrentUser } from "@/lib/session"
 
+// Structured logging utility
+const logRequest = (level: 'info' | 'error' | 'warn', message: string, data?: any) => {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+    service: 'chat-api',
+    ...data
+  }
+  console.log(JSON.stringify(logEntry))
+}
+
 // Initialize Redis for caching
 const redis = new Redis({
   url: process.env.REDIS_URL!,
@@ -35,17 +47,35 @@ function isCacheable(message: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now()
   const user = await getCurrentUser()
 
   if (!user) {
+    logRequest('warn', 'Unauthorized access attempt', {
+      ip: req.ip,
+      userAgent: req.headers.get('user-agent'),
+      endpoint: '/api/chat'
+    })
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
   const { message, model, skipCache = false } = await req.json()
 
   if (!message) {
+    logRequest('warn', 'Missing message in request', {
+      userId: user.id,
+      endpoint: '/api/chat'
+    })
     return NextResponse.json({ error: "Missing message" }, { status: 400 })
   }
+
+  logRequest('info', 'Chat request received', {
+    userId: user.id,
+    messageLength: message.length,
+    model: model || MODEL_MAP.fast,
+    skipCache,
+    endpoint: '/api/chat'
+  })
 
   const targetModel = (Object.values(MODEL_MAP) as string[]).includes(model)
     ? model
@@ -58,53 +88,114 @@ export async function POST(req: NextRequest) {
       const cachedResponse = await redis.get(cacheKey)
 
       if (cachedResponse) {
+        const responseTime = Date.now() - startTime
+        logRequest('info', 'Cache hit - returning cached response', {
+          userId: user.id,
+          cacheKey,
+          responseTimeMs: responseTime,
+          endpoint: '/api/chat'
+        })
         return new NextResponse(cachedResponse as string, {
           headers: {
             "Content-Type": "text/plain; charset=utf-8",
             "X-Cache-Status": "HIT",
+            "X-Response-Time": responseTime.toString(),
           },
         })
       }
+      logRequest('info', 'Cache miss - processing request', {
+        userId: user.id,
+        cacheKey,
+        endpoint: '/api/chat'
+      })
     } catch (error) {
-      console.warn("Redis cache error:", error)
+      logRequest('error', 'Redis cache error', {
+        userId: user.id,
+        error: (error as Error).message,
+        endpoint: '/api/chat'
+      })
       // Continue without caching
     }
   }
 
-  const stream = await streamAnswer({
-    prompt: message,
-    system: SYSTEM_PROMPT,
-    model: targetModel,
-  })
+  try {
+    const stream = await streamAnswer({
+      prompt: message,
+      system: SYSTEM_PROMPT,
+      model: targetModel,
+    })
 
-  // For caching, we need to collect the full response
-  // This is a trade-off: caching vs streaming
-  if (!skipCache && isCacheable(message)) {
-    try {
-      const responseText = await stream.toAIStream().text()
-      const cacheKey = generateCacheKey(message, targetModel, user.id)
+    // For caching, we need to collect the full response
+    // This is a trade-off: caching vs streaming
+    if (!skipCache && isCacheable(message)) {
+      try {
+        const responseText = await stream.toAIStream().text()
+        const cacheKey = generateCacheKey(message, targetModel, user.id)
+        const responseTime = Date.now() - startTime
 
-      // Cache the response asynchronously (don't await)
-      redis.setex(cacheKey, CACHE_TTL, responseText).catch(err =>
-        console.warn("Failed to cache response:", err)
-      )
+        // Cache the response asynchronously (don't await)
+        redis.setex(cacheKey, CACHE_TTL, responseText).catch(err =>
+          logRequest('error', 'Failed to cache response', {
+            userId: user.id,
+            error: (err as Error).message,
+            endpoint: '/api/chat'
+          })
+        )
 
-      return new NextResponse(responseText, {
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "X-Cache-Status": "MISS",
-        },
-      })
-    } catch (error) {
-      console.warn("Error caching response:", error)
-      // Fall back to streaming
+        logRequest('info', 'Response generated and cached', {
+          userId: user.id,
+          responseLength: responseText.length,
+          responseTimeMs: responseTime,
+          model: targetModel,
+          cached: true,
+          endpoint: '/api/chat'
+        })
+
+        return new NextResponse(responseText, {
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "X-Cache-Status": "MISS",
+            "X-Response-Time": responseTime.toString(),
+          },
+        })
+      } catch (error) {
+        logRequest('error', 'Error processing cached response', {
+          userId: user.id,
+          error: (error as Error).message,
+          endpoint: '/api/chat'
+        })
+        // Fall back to streaming
+      }
     }
-  }
 
-  return new NextResponse(stream.toAIStream(), {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "X-Cache-Status": "BYPASS",
-    },
-  })
+    const responseTime = Date.now() - startTime
+    logRequest('info', 'Streaming response initiated', {
+      userId: user.id,
+      model: targetModel,
+      cached: false,
+      responseTimeMs: responseTime,
+      endpoint: '/api/chat'
+    })
+
+    return new NextResponse(stream.toAIStream(), {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Cache-Status": "BYPASS",
+        "X-Response-Time": responseTime.toString(),
+      },
+    })
+  } catch (error) {
+    const responseTime = Date.now() - startTime
+    logRequest('error', 'AI service error', {
+      userId: user.id,
+      error: (error as Error).message,
+      model: targetModel,
+      responseTimeMs: responseTime,
+      endpoint: '/api/chat'
+    })
+    return NextResponse.json(
+      { error: "AI service temporarily unavailable" },
+      { status: 503 }
+    )
+  }
 }
